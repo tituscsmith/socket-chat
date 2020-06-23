@@ -5,5 +5,5 @@ https://socket.io/get-started/chat#Introduction
 
 Written by Titus Smith, June 2020
 
-![Alt text](Chat_Screenshot_Sample.png?raw=true "Socket.io Chat Screenshot")
+![Chat_Screenshot](Chat_Screenshot_Sample.png?raw=true "Socket.io Chat Screenshot")
 
