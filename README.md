@@ -4,3 +4,6 @@ Added private message, online status, and status broadcasting features; slightly
 https://socket.io/get-started/chat#Introduction
 
 Written by Titus Smith, June 2020
+
+![Alt text](relative/path/to/Chat_Screenshot_Sample.jpg?raw=true "Title")
+
