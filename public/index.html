@@ -7,63 +7,58 @@
         <link href="/styles.css" rel="stylesheet" />
     </head>
     <body>
-<h1 id = "title"; style = "display:none; text-align: center">Whaaaaaaaasup Chat</h1>
+<h1 id = "title"; style = "visibility:hidden; text-align: center">Whaasup Chat</h1>
       <!-- Stylize -->
 <div id="user-bar">
-  <input id="handle" type="text" placeholder="Enter a username!" />
-  <button id="submit">Submit</button>
+  <input id="handle" type="text" placeholder="Enter a username!" style="width: 15%; margin: auto"/>
+  <button id="submit" style="width: 15%; margin: auto" >Submit</button>
 </div>
-
-
-<!-- <div class = "row">
-    <div class = "column"><button class = "room-button" id="room1" >Room 1</button></div>
-    <div class = "column"><button class = "room-button" id="room2" >Room 2</button></div>
-</div> -->
-<!-- Four buttons in a group -->
-<div class="btn-group" style="width:100%">
-  <button id="room3" style="width:25%">Room 3</button>
-  <button id="room1" style="width:25%">Room 1</button>
-  <button id="room2" style="width:25%">Room 2</button>
-
-  <button id="room4" style="width:25%">Room 4</button>
-</div>
-<!-- <button id="private-message">Titus</button>
-<div id="container"></div>
-    <br>
-    <div>
-      <button id="generate">Generate</button>
-    </div> -->
 
     <div class = "box" id="chat-array">
-      <div container>
+      <div class = "online-box">
+        <select name="users" id="private-users" style = "visibility: hidden">
+          <option value="default">Choose someone to private message:</option>
+        </select>
+      <div class = "online-box" id = "online-box">
         <div id = "all-online"></div>
         <div id = "all-offline"></div>
-
       </div>
-        <div class = "chat-box" id = "general-chat">
-            <h2 id ="chat-title">Whaaaaaaaasup Chat</h2>
+    </div>
+        <div class = "chat-box" id = "general-chat" style = "visibility: hidden">
+            <h2 id ="chat-title">Whaasup Chat Chat</h2>
+            <h3 id ="chat-subtitle"></h2>
             <div class = "chat-window" id="chat-window">
                 <div class = "output"; id="output"></div>
                 <div class="feedback" id = "feedback"></div>
             </div>
             <!--  -->
+            <!-- <input type="text" style = "visibility:hidden; background-color: green"/> -->
             <input id="message" type="text" placeholder="Message" />
 
             <button id="send">Send</button>
       </div>
-      <div class = "chat-box" id = "private-chat">
+      <div class = "chat-box" id = "private-chat" style = "visibility: hidden">
           <h2 id ="private-chat-title">Private Chat</h2>
+          <h3 id ="private-chat-subtitle"></h2>
+
           <div class = "chat-window" id="private-chat-window">
               <div class = "output"; id="private-output"></div>
               <div class = "feedback"; id="private-feedback"></div>
           </div>
-          <input id="private-handle" type="text" placeholder="To: " />
+          <!-- <input id="private-handle" type="text" placeholder="To: " /> -->
           <input id="private-message" type="text" placeholder="Message" />
 
           <button id="private-send">Send</button>
+    </div>
+    <div class="btn-group" style="width: 10%">
+      <button id="room1" style="height:10%">Room 1</button>
+      <button id="room2" style="height:10%">Room 2</button>
+      <button id="room3" style="height:10%">Room 3</button>
+      <button id="room4" style="height:10%">Room 4</button>
     </div>
     </div>
 
 
     </body>
     <script src="/chat.js"></script>
+    <footer style = "text-align:center">Socket Programming Chat Application<br>Titus Smith<br><br>Credit to:<br><strong>TheNinjaNet.co.uk</strong> - Basic Socket Tutorial</footer>
