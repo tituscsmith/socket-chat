@@ -1,35 +1,57 @@
 body{
     font-family: 'Nunito';
-    background-color: #ced4d6;
-
+    background-color: #ebd9c6;
 }
 
 h2{
     font-size: 18px;
-    padding: 10px 20px;
-    color: #575ed8;
+    padding: 0px 20px 0px;
+    margin: 0px;
+    color: #00b300;
+}
+h3{
+    font-size: 16px;
+    margin: 0px;
+
+    padding: 0px 20px 0px;
+    color: #00b300;
 }
 
 .chat-box{
-    /* max-width: 600px; */
-    /* max-width: 30%; */
-    width: 600px;
-    margin: auto;
+    width: 38%;
+    min-width: 250px;
+    /* margin: auto; 10px; */
+    margin: 10px;
     /* margin: 30px; */
+    padding: 30px;
     border: 1px solid #ddd;
     box-shadow: 1px 3px 5px rgba(0,0,0,0.05);
     border-radius: 2px;
     background-color: white;
-    align: center;
+}
+.online-container{
+  width: 8%;
+  margin: auto;
+  align: center;
+  padding: 20px;
+}
+.online-box{
+  padding: 10px;
+  margin: auto;
+    border: 1px solid black;
+    background: rgb(249, 249, 249);
+    visibility: hidden;
 }
 .box {
    display: flex;
-   align-items:center;
+   padding: 5px;
 }
 .chat-window{
     height: 400px;
     overflow: auto;
     background: #f9f9f9;
+    border-radius: 2px;
+    border: 3px solid #ddd;
 
 }
 
@@ -47,7 +69,7 @@ h2{
 }
 
 .output strong{
-    color: #575ed8;
+    color: #5689D7;
 }
 
 label{
@@ -57,6 +79,7 @@ label{
 }
 
 input{
+    /* height: 20px; */
     padding: 10px 20px;
     box-sizing: border-box;
     background: #eee;
@@ -70,7 +93,9 @@ input{
 }
 
 button{
-    background: #575ed8;
+  display: block;
+
+    background: #00b300;
     color: #fff;
     font-size: 18px;
     margin: 2px;
@@ -78,29 +103,21 @@ button{
     width: 100%;
     border-radius: 0 0 2px 2px;
     border: 1px solid #ddd;
+    /* align: center; */
+
 }
 
 .btn-group button {
-  background-color: #4CAF50; /* Green background */
+  background-color: #00b300; /* Green background */
   border: 1px solid green; /* Green border */
   color: white; /* White text */
-  padding: 10px 24px; /* Some padding */
   cursor: pointer; /* Pointer/hand icon */
   float: left; /* Float the buttons side by side */
   visibility: hidden;
+  margin: 12% 0%;
 }
 
 /* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_button_group_justified */
-/* Clear floats (clearfix hack) */
-.btn-group:after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-.btn-group button:not(:last-child) {
-  border-right: none; /* Prevent double borders */
-}
 
 /* Add a background color on hover */
 .btn-group button:hover {
