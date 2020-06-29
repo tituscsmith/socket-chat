@@ -35,30 +35,35 @@ privateSelect.addEventListener("change", function() {
   }
   else if(privateSelect.value=="default"){
     console.log("else if");
-
     return;
   }
 
   else{
+    //Clear out messages when we switch
+    privateOutput.innerHTML = '';
+
     console.log("else");
-    privateOutput.innerHTML += '<p><strong>' + 'Switched to private message with' + ': </strong><em>' + privateSelect.value + '</em></p>';
+    // privateOutput.innerHTML += '<p><strong>' + 'Switched to private message with' + ': </strong><em>' + privateSelect.value + '</em></p>';
     privateSelect.options[0].text = "Close Private Chat";
     privateSubtitle.innerHTML = "<br>" + handle.value + "</em> talking to  <em>" + privateSelect.value + "</em>";
     // privateTitle.innerHTML+= privateSubtitle;
-
     document.getElementById('private-chat').style.visibility = "visible";
+
+    //Load all previous messages
+    socket.emit('private-load', privateSelect.value, handle.value);
+
   }
 
 });
 
 privateButton.addEventListener('click', function(){
   console.log(privateSelect.value);
-//  privateTitle.innerHTML += " with <em>" + privateHandle.value + "</em>";
   if(privateSelect.value !== "" || privateMessage.value !== ""){
     socket.emit('private-message', privateSelect.value, handle.value, privateMessage.value);
     privateSelect.value = "";
     privateMessage.value = "";
   }
+
 });
 
 room1.addEventListener('click', function(){
@@ -68,7 +73,6 @@ room1.addEventListener('click', function(){
   room2.style.visibility = "visible";
   document.getElementById('general-chat').style.visibility = "visible";
   socket.emit('room-switch', id);
-  // output.innerHTML += '<p><strong> Switched to' + id + '</strong>' + '</p>';
 });
 room2.addEventListener('click', function(){
   id = 'Room 2';
@@ -148,29 +152,16 @@ socket.on('private-message', function(otherHandle, message){
 socket.on('users-online', function(offlinearr, onlinearr){
   console.log("allonline updated");
   // userArray = onlinearr;
-  updateUsers(onlinearr)
+  //updateUsers(onlinearr)
+  totalUsers(onlinearr, offlinearr)
     allOnline.innerHTML = "<strong>Online Users: </strong><br><p style= 'color:green;'>" + onlinearr.join(" <br> ") + "</p>";
     allOffline.innerHTML = "<strong>Offline Users: </strong><br><p style= 'color:red;'>" + offlinearr.join(" <br> ") + "</p>";
 
 });
-
 //function to remove offline users and add online users
-function updateUsers(onlinearr){
-  //No remove as of now
-  for (var i=1; i<privateSelect.length; i++) {
-
-    var found = false;
-    for(const val of onlinearr){
-        if(privateSelect.options[i].value==val){
-          found = true;
-          break;
-        }
-    }
-    if(found == false){
-      removeUser(privateSelect.options[i].value);
-    }
-  }
-  for(let val of onlinearr){
+function totalUsers(onlinearr, offlinearr){
+  var allusers = onlinearr.concat(offlinearr);
+  for(let val of allusers){
     console.log(val);
 
     var found = false;
@@ -194,12 +185,4 @@ function addUser(data) {
   option.text = data;
   privateSelect.add(option);
   console.log("added option");
-}
-
-
-function removeUser(data){
-  for (var i=0; i<privateSelect.length; i++) {
-    if (privateSelect.options[i].value == data)
-        privateSelect.remove(i);
-  }
 }
