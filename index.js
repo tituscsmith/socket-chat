@@ -1,3 +1,5 @@
+//Server Side - Chat App - Titus Smith
+
 var express = require('express');
 var socket = require('socket.io');
 var MongoClient = require('mongodb').MongoClient;
@@ -39,20 +41,14 @@ MongoClient.connect(url, function(err, client){
 
          usersCollection.updateOne({username: uname}, {$set: {username: uname, status: "online"}}, {upsert: true}, function(err, res){
               console.log("inserted user into database");
-            //  offlineArray = offlineArray.filter(val => val !== socket.username);
+              //Loop through and find online and offline users
            usersCollection.find({}).forEach(function(row){
-             console.log("1" + row.status + " " + row.username);
              if(row.status == "online"){
                if(!onlineArray.includes(row.username)){
                  console.log("online" + row.username);
                  onlineArray.push(row.username);
                  offlineArray = offlineArray.filter(val => val !== row.username);
                }
-               // else{
-               //   console.log("else1");
-               //   console.log(onlineArray);
-               // }
-
              }
              else{
                console.log("offline" + row.username + " " + row.status);
@@ -67,8 +63,6 @@ MongoClient.connect(url, function(err, client){
              console.log("Offline Array:" + offlineArray);
              console.log("Online Array:" +onlineArray);
            });
-
-
         });
          //Remove from offline list
          //offlineArray = offlineArray.filter(val => val !== uname);
@@ -84,6 +78,15 @@ MongoClient.connect(url, function(err, client){
          if(row.sender!=row.receiver){
             socket.emit('private-message', row.sender, row.body);
           }
+       });
+     });
+     //Loads all messages from general message database
+     socket.on('room-load', function(room) {
+       //Find any messages between the people
+       roomCollection.find( {room: room}).forEach(function(row){
+         console.log("Room: " + room + " Message: " + row.body);
+         // var socketId = users[otherName];
+         io.in(room).emit('chat', {handle: row.sender, message: row.body});
        });
      });
 
@@ -127,26 +130,19 @@ MongoClient.connect(url, function(err, client){
            console.log("Offline Array:" + offlineArray);
            console.log("Online Array:" +onlineArray);
 
-           // io.emit('users-online', offlineArray, onlineArray);
              usersCollection.find({}).forEach(function(row){
-
-               // console.log(row.status + " " + row.username);
-               // if(row.status = "online"){
-               //   console.log("online" + row.username);
-               //   onlineArray.push(row.username);
-               // }
-               // else{
-               //   console.log("offline" + row.username);
-               //
-               //   offlineArray.push(row.username);
-               // }
              });
          }
-      //   io.emit('users-online', offlineArray, onlineArray);
-
       });
      });
       socket.on('chat', function(id, data){
+        roomCollection.insertOne({body: data.message,
+           sender: data.handle,
+           room: id,
+           seqNum: seqNum}, function(err, res){
+             console.log("inserted message into database");
+           })
+
           io.in(id).emit('chat', data);
           console.log(id);
       });
