@@ -1,5 +1,5 @@
 //Server Side - Chat App - Titus Smith
-
+var moment = require('moment');
 var express = require('express');
 var socket = require('socket.io');
 var MongoClient = require('mongodb').MongoClient;
@@ -29,7 +29,6 @@ MongoClient.connect(url, function(err, client){
 
 
   io.on('connection', (socket) => {
-    var seqNum = 1;
 
     console.log('Made socket connection', socket.id);
     socket.join(id);
@@ -60,6 +59,7 @@ MongoClient.connect(url, function(err, client){
              }
            }).then(function(){
              io.emit('users-online', offlineArray, onlineArray);
+            //socket.emit('users-online', offlineArray, onlineArray);
              console.log("Offline Array:" + offlineArray);
              console.log("Online Array:" +onlineArray);
            });
@@ -74,9 +74,9 @@ MongoClient.connect(url, function(err, client){
        messagesCollection.find( {$or: [{sender: yourName, receiver: otherName}, {sender: otherName, receiver: yourName}]}).forEach(function(row){
          console.log("Sender: " + yourName + " Receiver: " + otherName + " Message: " + row.body);
          var socketId = users[otherName];
-         io.to(socketId).emit('private-message', row.sender, row.body);
+         io.to(socketId).emit('private-message', row.sender, row.body, row.timestamp);
          if(row.sender!=row.receiver){
-            socket.emit('private-message', row.sender, row.body);
+            socket.emit('private-message', row.sender, row.body, row.timestamp);
           }
        });
      });
@@ -86,7 +86,8 @@ MongoClient.connect(url, function(err, client){
        roomCollection.find( {room: room}).forEach(function(row){
          console.log("Room: " + room + " Message: " + row.body);
          // var socketId = users[otherName];
-         io.in(room).emit('chat', {handle: row.sender, message: row.body});
+         //io.in(room).emit('chat', {handle: row.sender, message: row.body, timestamp: row.timestamp});
+         socket.emit('chat', {handle: row.sender, message: row.body, timestamp: row.timestamp});
        });
      });
 
@@ -95,18 +96,17 @@ MongoClient.connect(url, function(err, client){
        var socketId = users[otherName];
 
        //Emit to other person and yourself
-       io.to(socketId).emit('private-message', yourName, message);
+       io.to(socketId).emit('private-message', yourName, message, moment().format('lll'));
 
        if(otherName!=yourName){//Don't print it out twice if someone is texting themselves
-         socket.emit('private-message', yourName, message);
+         socket.emit('private-message', yourName, message, moment().format('lll'));
        }
-       seqNum++;//increment sequence number
 
       // messages find id and increment
        messagesCollection.insertOne({body: message,
           sender: yourName,
           receiver: otherName,
-          seqNum: seqNum}, function(err, res){
+          timestamp: moment().format('lll')}, function(err, res){
             console.log("inserted message into database");
           })
      });
@@ -139,11 +139,11 @@ MongoClient.connect(url, function(err, client){
         roomCollection.insertOne({body: data.message,
            sender: data.handle,
            room: id,
-           seqNum: seqNum}, function(err, res){
+           timestamp: moment().format('lll')}, function(err, res){
              console.log("inserted message into database");
            })
 
-          io.in(id).emit('chat', data);
+          io.in(id).emit('chat', {message: data.message, handle: data.handle, timestamp: moment().format('lll')});
           console.log(id);
       });
 
