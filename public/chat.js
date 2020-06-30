@@ -93,7 +93,7 @@ usernameButton.addEventListener('click', function(){
   }
 
     chatSubtitle.innerHTML = "<br><em>" + handle.value + "</em>";
-    document.getElementById('title').style.visibility = "visible";
+    //document.getElementById('title').style.visibility = "visible";
     document.getElementById('online-box').style.visibility = "visible";
     document.getElementById('private-users').style.visibility = "visible";
 
