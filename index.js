@@ -74,7 +74,7 @@ MongoClient.connect(url, function(err, client){
        messagesCollection.find( {$or: [{sender: yourName, receiver: otherName}, {sender: otherName, receiver: yourName}]}).forEach(function(row){
          console.log("Sender: " + yourName + " Receiver: " + otherName + " Message: " + row.body);
          var socketId = users[otherName];
-         io.to(socketId).emit('private-message', row.sender, row.body, row.timestamp);
+        // io.to(socketId).emit('private-message', row.sender, row.body, row.timestamp);
          if(row.sender!=row.receiver){
             socket.emit('private-message', row.sender, row.body, row.timestamp);
           }
