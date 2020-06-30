@@ -65,7 +65,7 @@ privateButton.addEventListener('click', function(){
 });
 
 room1.addEventListener('click', function(){
-  output.innerHTML = '';3
+  output.innerHTML = '';//Clear room
   id = 'Room 1';
   console.log("Button1 clicked");
   room1.style.visibility = "hidden";
