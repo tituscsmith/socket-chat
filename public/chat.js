@@ -1,10 +1,11 @@
+//Client Side - Chat App - Titus Smith
+
 // Make connection
 var socket = io.connect('http://localhost:4000');
 var userArray;
 // Query DOM
 var message = document.getElementById('message'),
       handle = document.getElementById('handle'),
-      // privateHandle = document.getElementById('private-handle'),
       btn = document.getElementById('send'),
       output = document.getElementById('output'),
       chatTitle = document.getElementById('chat-title'),
@@ -41,12 +42,9 @@ privateSelect.addEventListener("change", function() {
   else{
     //Clear out messages when we switch
     privateOutput.innerHTML = '';
-
     console.log("else");
-    // privateOutput.innerHTML += '<p><strong>' + 'Switched to private message with' + ': </strong><em>' + privateSelect.value + '</em></p>';
     privateSelect.options[0].text = "Close Private Chat";
     privateSubtitle.innerHTML = "<br>" + handle.value + "</em> talking to  <em>" + privateSelect.value + "</em>";
-    // privateTitle.innerHTML+= privateSubtitle;
     document.getElementById('private-chat').style.visibility = "visible";
 
     //Load all previous messages
@@ -67,19 +65,24 @@ privateButton.addEventListener('click', function(){
 });
 
 room1.addEventListener('click', function(){
+  output.innerHTML = '';3
   id = 'Room 1';
   console.log("Button1 clicked");
   room1.style.visibility = "hidden";
   room2.style.visibility = "visible";
   document.getElementById('general-chat').style.visibility = "visible";
   socket.emit('room-switch', id);
+  socket.emit('room-load', 'Room 1');
 });
 room2.addEventListener('click', function(){
+  output.innerHTML = '';//Clear room
   id = 'Room 2';
   room1.style.visibility = "visible";
   room2.style.visibility = "hidden";
   document.getElementById('general-chat').style.visibility = "visible";
   socket.emit('room-switch', id);
+  socket.emit('room-load', 'Room 2');
+
 });
 //Update room with button listener
 
@@ -134,14 +137,10 @@ socket.on('typing', function(data){
 });
 socket.on('online', function(data){
   console.log("online received");
-
-     // addUser(data);
     output.innerHTML += '<p style="color:green;"><em>' + data + ' is now online!</em></p>';
 });
 socket.on('offline', function(data){
   console.log("offline received");
-  // removeUser(data);
-
     output.innerHTML += '<p style="color:red;"><em>' + data + ' is now offline.</em></p>';
 });
 socket.on('private-message', function(otherHandle, message){
@@ -151,9 +150,9 @@ socket.on('private-message', function(otherHandle, message){
 });
 socket.on('users-online', function(offlinearr, onlinearr){
   console.log("allonline updated");
-  // userArray = onlinearr;
   //updateUsers(onlinearr)
-  totalUsers(onlinearr, offlinearr)
+  //Display the users on left hand
+  totalUsers(onlinearr, offlinearr);
     allOnline.innerHTML = "<strong>Online Users: </strong><br><p style= 'color:green;'>" + onlinearr.join(" <br> ") + "</p>";
     allOffline.innerHTML = "<strong>Offline Users: </strong><br><p style= 'color:red;'>" + offlinearr.join(" <br> ") + "</p>";
 
