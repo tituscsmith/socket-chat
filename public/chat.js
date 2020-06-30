@@ -26,6 +26,7 @@ var message = document.getElementById('message'),
       privateSelect = document.getElementById('private-users');
 
 var id = 'some room';
+
 privateSelect.addEventListener("change", function() {
 
   if(privateSelect.value=="default" && privateSelect.options[0].text=="Close Private Chat"){
@@ -126,7 +127,7 @@ message.addEventListener('keypress', function(){
 //THIRD STEP
 socket.on('chat', function(data){
     feedback.innerHTML = '';//After we click send, make feedback message go away
-    output.innerHTML += '<p><strong>' + data.handle + ': </strong>' + data.message + '</p>';
+    output.innerHTML += '<p><span class="left"><strong>' + data.handle + ': </strong>' + data.message + '</span><span class="right">' + data.timestamp +'</span></p>';
 });
 socket.on('room-switch', function(data){
     output.innerHTML += '<p><strong> Switched to ' + data + '</strong>' + '</p>';
@@ -143,10 +144,10 @@ socket.on('offline', function(data){
   console.log("offline received");
     output.innerHTML += '<p style="color:red;"><em>' + data + ' is now offline.</em></p>';
 });
-socket.on('private-message', function(otherHandle, message){
+socket.on('private-message', function(otherHandle, message, timestamp){
     console.log("ID is" + otherHandle);
     console.log(message);
-    privateOutput.innerHTML += '<p><strong>' + otherHandle + ': </strong>' + message + '</p>';
+    privateOutput.innerHTML += '<p><span class="left"><strong>' + otherHandle + ': </strong>' + message + '</span><span class="right">' + timestamp +'</span></p>';
 });
 socket.on('users-online', function(offlinearr, onlinearr){
   console.log("allonline updated");
