@@ -14,16 +14,13 @@ var message = document.getElementById('message'),
       privateOutput = document.getElementById('private-output'),
       feedback = document.getElementById('feedback'),
       usernameButton = document.getElementById('submit'),
-      room1 = document.getElementById('room1'),
-      room2 = document.getElementById('room2'),
-      room3 = document.getElementById('room3'),
-      room4 = document.getElementById('room4'),
       allOffline = document.getElementById('all-offline'),
       privateButton = document.getElementById('private-send'),
       privateMessage = document.getElementById('private-message'),
       allOnline = document.getElementById('all-online'),
       privateSubtitle = document.getElementById('private-chat-subtitle'),
       privateSelect = document.getElementById('private-users');
+const numRooms = 4;
 
 var id = 'some room';
 
@@ -59,32 +56,28 @@ privateButton.addEventListener('click', function(){
   console.log(privateSelect.value);
   if(privateSelect.value !== "" || privateMessage.value !== ""){
     socket.emit('private-message', privateSelect.value, handle.value, privateMessage.value);
-    privateSelect.value = "";
+    // privateSelect.value = "";
     privateMessage.value = "";
   }
 
 });
 
-room1.addEventListener('click', function(){
-  output.innerHTML = '';//Clear room
-  id = 'Room 1';
-  console.log("Button1 clicked");
-  room1.style.visibility = "hidden";
-  room2.style.visibility = "visible";
-  document.getElementById('general-chat').style.visibility = "visible";
-  socket.emit('room-switch', id);
-  socket.emit('room-load', 'Room 1');
-});
-room2.addEventListener('click', function(){
-  output.innerHTML = '';//Clear room
-  id = 'Room 2';
-  room1.style.visibility = "visible";
-  room2.style.visibility = "hidden";
-  document.getElementById('general-chat').style.visibility = "visible";
-  socket.emit('room-switch', id);
-  socket.emit('room-load', 'Room 2');
+function roomHandler(roomNumber){
+  console.log("Logging" + roomNumber);
 
-});
+  output.innerHTML = '';//Clear room
+
+  if(id== 'Room ' + roomNumber && document.getElementById('general-chat').style.visibility == "visible"){
+    document.getElementById('general-chat').style.visibility = "hidden";
+
+  }
+  else{
+  id = 'Room ' + roomNumber
+  document.getElementById('general-chat').style.visibility = "visible";
+  socket.emit('room-switch', id);
+  socket.emit('room-load', id);
+}
+}
 //Update room with button listener
 
 usernameButton.addEventListener('click', function(){
@@ -97,8 +90,12 @@ usernameButton.addEventListener('click', function(){
     document.getElementById('online-box').style.visibility = "visible";
     document.getElementById('private-users').style.visibility = "visible";
 
-    room1.style.visibility = "visible";
-    room2.style.visibility = "visible";
+    //Make all the buttons visible
+    for(var i = 1; i <= numRooms; i++){
+      console.log("room"+i);
+        document.getElementById("room"+i).style.visibility = "visible";
+    }
+
    document.getElementById('user-bar').style.display = "none";
 
    socket.emit('online', id, handle.value);//Let the server know someone is typing
@@ -133,21 +130,19 @@ socket.on('room-switch', function(data){
     output.innerHTML += '<p><strong> Switched to ' + data + '</strong>' + '</p>';
 });
 socket.on('typing', function(data){
-  console.log("Typing");
     feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em></p>';
 });
 socket.on('online', function(data){
-  console.log("online received");
     output.innerHTML += '<p style="color:green;"><em>' + data + ' is now online!</em></p>';
 });
 socket.on('offline', function(data){
-  console.log("offline received");
     output.innerHTML += '<p style="color:red;"><em>' + data + ' is now offline.</em></p>';
 });
 socket.on('private-message', function(otherHandle, message, timestamp){
-    console.log("ID is" + otherHandle);
-    console.log(message);
     privateOutput.innerHTML += '<p><span class="left"><strong>' + otherHandle + ': </strong>' + message + '</span><span class="right">' + timestamp +'</span></p>';
+});
+socket.on('offline-notice', function(message){
+    privateOutput.innerHTML += '<p style="color:orange;"><em>' + message + '</em></p>';
 });
 socket.on('users-online', function(offlinearr, onlinearr){
   console.log("allonline updated");
