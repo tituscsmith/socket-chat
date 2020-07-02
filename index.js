@@ -95,11 +95,23 @@ MongoClient.connect(url, function(err, client){
        console.log("PM Received" + otherName + " " + socketId);
        var socketId = users[otherName];
 
+
        //Emit to other person and yourself
        io.to(socketId).emit('private-message', yourName, message, moment().format('lll'));
 
        if(otherName!=yourName){//Don't print it out twice if someone is texting themselves
          socket.emit('private-message', yourName, message, moment().format('lll'));
+         if(!onlineArray.includes(otherName)){
+           console.log(": otherName");
+           offlineMessage = "Heads up: " + otherName + " is currently offline!"
+           socket.emit('offline-notice', offlineMessage);
+         }
+         else{
+           console.log("else")
+         }
+       }
+       else{
+         console.log("else 2")
        }
 
       // messages find id and increment
