@@ -89,9 +89,6 @@ usernameButton.addEventListener('click', function () {
 	if (handle.value == '') {
 		return;
 	}
-
-	// chatSubtitle.innerHTML = '<br><em>' + handle.value + '</em>';
-	//document.getElementById('title').style.visibility = "visible";
 	document.getElementById('online-box').style.visibility = 'visible';
 	document.getElementById('private-users').style.visibility = 'visible';
 	document.getElementById('leave').style.visibility = 'visible';
@@ -127,6 +124,7 @@ message.addEventListener('keypress', function () {
 // Listen for events
 //THIRD STEP
 socket.on('chat', function (data) {
+	let date = new Date(data.timestamp);
 	feedback.innerHTML = ''; //After we click send, make feedback message go away
 	output.innerHTML +=
 		'<p word-wrap = "break-word"><strong>' +
@@ -134,20 +132,10 @@ socket.on('chat', function (data) {
 		':</strong> ' +
 		data.message +
 		'<br /><small class = "right"> ' +
-		data.timestamp +
+		date.toLocaleString() +
 		'</small></p>';
-	// output.innerHTML +=
-	// 	'<p><span class="left"><strong>' +
-	// 	data.handle +
-	// 	': </strong>' +
-	// 	data.message +
-	// 	'</span><span class="right">' +
-	// 	data.timestamp +
-	// 	'</span></p>';
 });
 socket.on('room-switch', function (data) {
-	// output.innerHTML += '<p><strong> Switched to ' + data + '</strong>' + '</p>';
-	// chatSubtitle.innerHTML = '<br/><p><strong>' + data + '</strong>' + '</p>';
 	chatSubtitle.innerHTML = '<br/>' + data;
 });
 socket.on('typing', function (data) {
@@ -162,22 +150,16 @@ socket.on('offline', function (data) {
 		'<p style="color:red;"><em>' + data + ' is now offline.</em></p>';
 });
 socket.on('private-message', function (otherHandle, message, timestamp) {
+	let date = new Date(timestamp);
+
 	privateOutput.innerHTML +=
 		'<p word-wrap = "break-word"><strong>' +
 		otherHandle +
 		':</strong> ' +
 		message +
 		'<br /><small class = "right"> ' +
-		timestamp +
+		date.toLocaleString() +
 		'</small></p>';
-	// privateOutput.innerHTML +=
-	// 	'<p><span class="left"><strong>' +
-	// 	otherHandle +
-	// 	': </strong>' +
-	// 	message +
-	// 	'</span><span class="right">' +
-	// 	timestamp +
-	// 	'</span></p>';
 });
 socket.on('offline-notice', function (message) {
 	privateOutput.innerHTML +=

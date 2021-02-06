@@ -92,8 +92,6 @@ const client = new MongoClient(url, {
 		socket.on('private-load', function (otherName, yourName) {
 			otherName = customFilter.clean(otherName);
 			yourName = customFilter.clean(yourName);
-			console.log(otherName);
-			console.log(yourName);
 			//Find any messages between the people
 			messagesCollection
 				.find({
@@ -103,14 +101,14 @@ const client = new MongoClient(url, {
 					],
 				})
 				.forEach(function (row) {
-					console.log(
-						'Sender: ' +
-							yourName +
-							' Receiver: ' +
-							otherName +
-							' Message: ' +
-							row.body
-					);
+					// console.log(
+					// 	'Sender: ' +
+					// 		yourName +
+					// 		' Receiver: ' +
+					// 		otherName +
+					// 		' Message: ' +
+					// 		row.body
+					// );
 					// var socketId = users[otherName];
 					// io.to(socketId).emit('private-message', row.sender, row.body, row.timestamp);
 					if (row.sender != row.receiver) {
@@ -157,7 +155,6 @@ const client = new MongoClient(url, {
 					moment().format('lll')
 				);
 				if (!onlineArray.includes(otherName)) {
-					console.log(': otherName');
 					offlineMessage = 'Heads up: ' + otherName + ' is currently offline!';
 					socket.emit('offline-notice', offlineMessage);
 				}
@@ -172,7 +169,7 @@ const client = new MongoClient(url, {
 					timestamp: moment().format('lll'),
 				},
 				function (err, res) {
-					console.log('inserted message into database');
+					console.log(err);
 				}
 			);
 		});
@@ -209,19 +206,18 @@ const client = new MongoClient(url, {
 					body: customFilter.clean(data.message),
 					sender: data.handle,
 					room: id,
-					timestamp: moment().format('lll'),
+					timestamp: new Date(),
 				},
 				function (err, res) {
-					console.log('inserted message into database');
+					console.log(err);
 				}
 			);
 
 			io.in(id).emit('chat', {
 				message: customFilter.clean(data.message),
 				handle: data.handle,
-				timestamp: moment().format('lll'),
+				timestamp: new Date(),
 			});
-			console.log(id);
 		});
 
 		// Handle typing event
