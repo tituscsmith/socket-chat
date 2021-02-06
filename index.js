@@ -37,9 +37,9 @@ const client = new MongoClient(url, {
 	const db = client.db('node_chat');
 	// const collection = databse.collection('private_messages');
 	// var db = client.db('node_chat');
-	var messagesCollection = db.collection('private-messages');
-	var usersCollection = db.collection('all-users');
-	var roomCollection = db.collection('general-messages');
+	var messagesCollection = db.collection('private_messages');
+	var usersCollection = db.collection('all_users');
+	var roomCollection = db.collection('general_messages');
 
 	io.on('connection', (socket) => {
 		console.log('Made socket connection', socket.id);
@@ -82,8 +82,8 @@ const client = new MongoClient(url, {
 						.then(function () {
 							io.emit('users-online', offlineArray, onlineArray);
 							//socket.emit('users-online', offlineArray, onlineArray);
-							console.log('Offline Array:' + offlineArray);
-							console.log('Online Array:' + onlineArray);
+							// console.log('Offline Array:' + offlineArray);
+							// console.log('Online Array:' + onlineArray);
 						});
 				}
 			);

@@ -1,9 +1,11 @@
 //Client Side - Chat App - Titus Smith
+// PORT = process.env.PORT || 4000;
+// console.log(location.href);
+// PORT = process.env.PORT || 4000;
 
 // Make connection
-var socket = io.connect('http://localhost:4000');
+var socket = io.connect('https://socket-chat-titus.herokuapp.com');
 // var socket = io('http://localhost:4000');
-// const socket = io('http://localhost:3000');
 
 var userArray;
 // Query DOM
