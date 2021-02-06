@@ -1,124 +1,123 @@
-body{
-    font-family: 'Nunito';
-    background-color: #ebd9c6;
+body {
+	font-family: 'Nunito';
+	background-color: #ebd9c6;
 }
 
-h2{
-    font-size: 18px;
-    padding: 0px 20px 0px;
-    margin: 0px;
-    color: #00b300;
+h2 {
+	font-size: 18px;
+	padding: 0px 20px 0px;
+	margin: 0px;
+	color: #00b300;
 }
-h3{
-    font-size: 16px;
-    margin: 0px;
-    padding: 0px 20px 0px;
-    color: #00b300;
+h3 {
+	font-size: 16px;
+	margin: 0px;
+	padding: 0px 20px 0px;
+	color: #00b300;
 }
 
-.chat-box{
-    width: 38%;
-    min-width: 250px;
-    margin: 10px;
-    padding: 30px;
-    border: 1px solid #ddd;
-    box-shadow: 1px 3px 5px rgba(0,0,0,0.05);
-    border-radius: 2px;
-    background-color: white;
+.chat-box {
+	width: 38%;
+	min-width: 250px;
+	margin: 10px;
+	padding: 30px;
+	border: 1px solid #ddd;
+	box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.05);
+	border-radius: 2px;
+	background-color: white;
 }
-.online-container{
-  width: 8%;
-  margin: auto;
-  align: center;
-  padding: 20px;
+.online-container {
+	width: 8%;
+	margin: auto;
+	text-align: center;
+	padding: 20px;
 }
-.online-box{
-  padding: 10px;
-  margin: auto;
-    border: 1px solid black;
-    background: rgb(249, 249, 249);
-    visibility: hidden;
+.online-box {
+	padding: 10px;
+	margin: auto;
+	border: 1px solid black;
+	background: rgb(249, 249, 249);
+	visibility: hidden;
 }
 .box {
-   display: flex;
-   padding: 5px;
+	display: flex;
+	padding: 5px;
 }
-.chat-window{
-    height: 400px;
-    overflow: auto;
-    background: #f9f9f9;
-    border-radius: 2px;
-    border: 3px solid #ddd;
-
+.chat-window {
+	height: 400px;
+	overflow: auto;
+	background: #f9f9f9;
+	border-radius: 2px;
+	border: 3px solid #ddd;
 }
-.right{
-    float:right;
-}
-
-.left{
-    float:left;
-}
-.output p{
-    padding: 14px 0px;
-    margin: 0 20px;
-    border-bottom: 1px solid #e9e9e9;
-    color: #555;
+.right {
+	float: right;
 }
 
-.feedback p{
-    color: #aaa;
-    padding: 14px 0px;
-    margin: 0 20px;
+.left {
+	float: left;
+}
+.output p {
+	padding: 14px 0px;
+	margin: 0 20px;
+	border-bottom: 1px solid #e9e9e9;
+	color: #555;
 }
 
-.output strong{
-    color: #5689D7;
+.feedback p {
+	color: #aaa;
+	padding: 14px 0px;
+	margin: 0 20px;
 }
 
-label{
-    box-sizing: border-box;
-    display: inline;
-    padding: 10px 20px;
+.output strong {
+	color: #5689d7;
 }
 
-input{
-    padding: 10px 20px;
-    box-sizing: border-box;
-    background: #eee;
-    border: 0;
-    display: block;
-    width: 100%;
-    background: #fff;
-    border-bottom: 1px solid #eee;
-    font-family: Nunito;
-    font-size: 16px;
+label {
+	box-sizing: border-box;
+	display: inline;
+	padding: 10px 20px;
 }
 
-button{
-  display: block;
-    background: #00b300;
-    color: #fff;
-    font-size: 18px;
-    margin: 2px;
-    padding: 12px 0;
-    width: 100%;
-    border-radius: 0 0 2px 2px;
-    border: 1px solid #ddd;
+input {
+	padding: 10px 20px;
+	box-sizing: border-box;
+	background: #eee;
+	border: 0;
+	display: block;
+	width: 100%;
+	background: #fff;
+	border-bottom: 1px solid #eee;
+	font-family: Nunito;
+	font-size: 16px;
+}
+
+button {
+	display: block;
+	background: #00b300;
+	color: #fff;
+	font-size: 18px;
+	margin: 2px;
+	padding: 12px 0;
+	width: 100%;
+	border-radius: 0 0 2px 2px;
+	border: 1px solid #ddd;
 }
 
 .btn-group button {
-  background-color: #00b300; /* Green background */
-  border: 1px solid green; /* Green border */
-  color: white; /* White text */
-  cursor: pointer; /* Pointer/hand icon */
-  float: left; /* Float the buttons side by side */
-  visibility: hidden;
-  margin: 12% 0%;
+	background-color: #00b300; /* Green background */
+	border: 1px solid green; /* Green border */
+	color: white; /* White text */
+	cursor: pointer; /* Pointer/hand icon */
+	float: left; /* Float the buttons side by side */
+	visibility: hidden;
+	margin: 12% 0%;
 }
 
 /* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_button_group_justified */
 
 /* Add a background color on hover */
 .btn-group button:hover {
-  background-color: #3e8e41;
+	background-color: #3e8e41;
 }
