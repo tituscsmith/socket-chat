@@ -121,8 +121,8 @@ message.addEventListener('keypress', function () {
 	socket.emit('typing', id);
 	//Send their name
 });
+
 // Listen for events
-//THIRD STEP
 socket.on('chat', function (data) {
 	let date = new Date(data.timestamp);
 	feedback.innerHTML = ''; //After we click send, make feedback message go away
