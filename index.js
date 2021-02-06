@@ -17,6 +17,9 @@ app.use(express.static('public'));
 // Socket setup & pass server
 var io = socket(server);
 
+var Filter = require('bad-words');
+const customFilter = new Filter({ placeHolder: 'x' });
+
 var users = [];
 var onlineArray = new Array();
 var offlineArray = new Array();
@@ -62,14 +65,12 @@ const client = new MongoClient(url, {
 						.forEach(function (row) {
 							if (row.status == 'online') {
 								if (!onlineArray.includes(row.username)) {
-									console.log('online' + row.username);
 									onlineArray.push(row.username);
 									offlineArray = offlineArray.filter(
 										(val) => val !== row.username
 									);
 								}
 							} else {
-								console.log('offline' + row.username + ' ' + row.status);
 								if (!offlineArray.includes(row.username)) {
 									offlineArray.push(row.username);
 									onlineArray = onlineArray.filter(
@@ -81,9 +82,6 @@ const client = new MongoClient(url, {
 						})
 						.then(function () {
 							io.emit('users-online', offlineArray, onlineArray);
-							//socket.emit('users-online', offlineArray, onlineArray);
-							// console.log('Offline Array:' + offlineArray);
-							// console.log('Online Array:' + onlineArray);
 						});
 				}
 			);
@@ -133,9 +131,8 @@ const client = new MongoClient(url, {
 		});
 
 		socket.on('private-message', function (otherName, yourName, message) {
-			console.log('PM Received' + otherName + ' ' + socketId);
 			var socketId = users[otherName];
-
+			message = customFilter.clean(message);
 			//Emit to other person and yourself
 			io.to(socketId).emit(
 				'private-message',
@@ -156,17 +153,13 @@ const client = new MongoClient(url, {
 					console.log(': otherName');
 					offlineMessage = 'Heads up: ' + otherName + ' is currently offline!';
 					socket.emit('offline-notice', offlineMessage);
-				} else {
-					console.log('else');
 				}
-			} else {
-				console.log('else 2');
 			}
 
 			// messages find id and increment
 			messagesCollection.insertOne(
 				{
-					body: message,
+					body: customFilter.clean(message),
 					sender: yourName,
 					receiver: otherName,
 					timestamp: moment().format('lll'),
@@ -207,7 +200,7 @@ const client = new MongoClient(url, {
 		socket.on('chat', function (id, data) {
 			roomCollection.insertOne(
 				{
-					body: data.message,
+					body: customFilter.clean(data.message),
 					sender: data.handle,
 					room: id,
 					timestamp: moment().format('lll'),
@@ -218,7 +211,7 @@ const client = new MongoClient(url, {
 			);
 
 			io.in(id).emit('chat', {
-				message: data.message,
+				message: customFilter.clean(data.message),
 				handle: data.handle,
 				timestamp: moment().format('lll'),
 			});

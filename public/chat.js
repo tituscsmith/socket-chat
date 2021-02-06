@@ -1,11 +1,10 @@
 //Client Side - Chat App - Titus Smith
-// PORT = process.env.PORT || 4000;
-// console.log(location.href);
-// PORT = process.env.PORT || 4000;
 
 // Make connection
 var socket = io.connect('https://socket-chat-titus.herokuapp.com');
-// var socket = io('http://localhost:4000');
+// var socket = io.connect('http://localhost:4000');
+
+//Need to enter swear word filtering
 
 var userArray;
 // Query DOM
@@ -28,30 +27,22 @@ var message = document.getElementById('message'),
 const numRooms = 4;
 
 var id = 'some room';
-console.log(privateSelect);
 privateSelect.addEventListener('change', function () {
 	if (
 		privateSelect.value == 'default' &&
 		privateSelect.options[0].text == 'Close Private Chat'
 	) {
-		console.log('if');
 		document.getElementById('private-chat').style.visibility = 'hidden';
-		privateSelect.options[0].text = 'Choose someone to private message:';
+		privateSelect.options[0].text = 'Private Message Someone:';
 		return;
 	} else if (privateSelect.value == 'default') {
-		console.log('else if');
 		return;
 	} else {
 		//Clear out messages when we switch
 		privateOutput.innerHTML = '';
-		console.log('else');
 		privateSelect.options[0].text = 'Close Private Chat';
 		privateSubtitle.innerHTML =
-			'<br>' +
-			handle.value +
-			'</em> talking to  <em>' +
-			privateSelect.value +
-			'</em>';
+			'<br/>Messaging:  <em>' + privateSelect.value + '</em>';
 		document.getElementById('private-chat').style.visibility = 'visible';
 
 		//Load all previous messages
@@ -60,7 +51,6 @@ privateSelect.addEventListener('change', function () {
 });
 
 privateButton.addEventListener('click', function () {
-	console.log(privateSelect.value);
 	if (privateSelect.value !== '' || privateMessage.value !== '') {
 		socket.emit(
 			'private-message',
@@ -74,8 +64,6 @@ privateButton.addEventListener('click', function () {
 });
 
 function roomHandler(roomNumber) {
-	console.log('Logging' + roomNumber);
-
 	output.innerHTML = ''; //Clear room
 
 	if (
@@ -90,6 +78,10 @@ function roomHandler(roomNumber) {
 		socket.emit('room-load', id);
 	}
 }
+function leaveRoom() {
+	// socket.emit('disconnect');
+	window.location.reload();
+}
 //Update room with button listener
 
 usernameButton.addEventListener('click', function () {
@@ -97,14 +89,14 @@ usernameButton.addEventListener('click', function () {
 		return;
 	}
 
-	chatSubtitle.innerHTML = '<br><em>' + handle.value + '</em>';
+	// chatSubtitle.innerHTML = '<br><em>' + handle.value + '</em>';
 	//document.getElementById('title').style.visibility = "visible";
 	document.getElementById('online-box').style.visibility = 'visible';
 	document.getElementById('private-users').style.visibility = 'visible';
+	document.getElementById('leave').style.visibility = 'visible';
 
 	//Make all the buttons visible
 	for (var i = 1; i <= numRooms; i++) {
-		console.log('room' + i);
 		document.getElementById('room' + i).style.visibility = 'visible';
 	}
 
@@ -136,16 +128,26 @@ message.addEventListener('keypress', function () {
 socket.on('chat', function (data) {
 	feedback.innerHTML = ''; //After we click send, make feedback message go away
 	output.innerHTML +=
-		'<p><span class="left"><strong>' +
+		'<p word-wrap = "break-word"><strong>' +
 		data.handle +
-		': </strong>' +
+		':</strong> ' +
 		data.message +
-		'</span><span class="right">' +
+		'<br /><small class = "right"> ' +
 		data.timestamp +
-		'</span></p>';
+		'</small></p>';
+	// output.innerHTML +=
+	// 	'<p><span class="left"><strong>' +
+	// 	data.handle +
+	// 	': </strong>' +
+	// 	data.message +
+	// 	'</span><span class="right">' +
+	// 	data.timestamp +
+	// 	'</span></p>';
 });
 socket.on('room-switch', function (data) {
-	output.innerHTML += '<p><strong> Switched to ' + data + '</strong>' + '</p>';
+	// output.innerHTML += '<p><strong> Switched to ' + data + '</strong>' + '</p>';
+	// chatSubtitle.innerHTML = '<br/><p><strong>' + data + '</strong>' + '</p>';
+	chatSubtitle.innerHTML = '<br/>' + data;
 });
 socket.on('typing', function (data) {
 	feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em></p>';
@@ -160,20 +162,27 @@ socket.on('offline', function (data) {
 });
 socket.on('private-message', function (otherHandle, message, timestamp) {
 	privateOutput.innerHTML +=
-		'<p><span class="left"><strong>' +
+		'<p word-wrap = "break-word"><strong>' +
 		otherHandle +
-		': </strong>' +
+		':</strong> ' +
 		message +
-		'</span><span class="right">' +
+		'<br /><small class = "right"> ' +
 		timestamp +
-		'</span></p>';
+		'</small></p>';
+	// privateOutput.innerHTML +=
+	// 	'<p><span class="left"><strong>' +
+	// 	otherHandle +
+	// 	': </strong>' +
+	// 	message +
+	// 	'</span><span class="right">' +
+	// 	timestamp +
+	// 	'</span></p>';
 });
 socket.on('offline-notice', function (message) {
 	privateOutput.innerHTML +=
 		'<p style="color:orange;"><em>' + message + '</em></p>';
 });
 socket.on('users-online', function (offlinearr, onlinearr) {
-	console.log('allonline updated');
 	//updateUsers(onlinearr)
 	//Display the users on left hand
 	totalUsers(onlinearr, offlinearr);
@@ -190,8 +199,6 @@ socket.on('users-online', function (offlinearr, onlinearr) {
 function totalUsers(onlinearr, offlinearr) {
 	var allusers = onlinearr.concat(offlinearr);
 	for (let val of allusers) {
-		console.log(val);
-
 		var found = false;
 		for (i = 0; i < privateSelect.length; i++) {
 			if (privateSelect.options[i].value == val) {
@@ -199,10 +206,7 @@ function totalUsers(onlinearr, offlinearr) {
 				break;
 			}
 		}
-		console.log(val);
-		console.log(onlinearr);
-
-		if (found == false) {
+		if (!found) {
 			addUser(val);
 		}
 	}
@@ -212,5 +216,4 @@ function addUser(data) {
 	option.value = data;
 	option.text = data;
 	privateSelect.add(option);
-	console.log('added option');
 }

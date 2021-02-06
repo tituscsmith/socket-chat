@@ -1,24 +1,30 @@
-body {
-	font-family: 'Nunito';
-	background-color: #ebd9c6;
-}
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Raleway&display=swap');
 
+body {
+	font-family: 'Raleway', sans-serif !important;
+	background-color: #e6e6e6;
+}
+h1 {
+	font-size: 60px;
+}
 h2 {
-	font-size: 18px;
-	padding: 0px 20px 0px;
+	font-size: 24px;
 	margin: 0px;
 	color: #00b300;
 }
 h3 {
-	font-size: 16px;
+	font-size: 20px;
 	margin: 0px;
-	padding: 0px 20px 0px;
-	color: #00b300;
+}
+small {
+	font-size: 10px;
+}
+select {
+	background-color: #0093e8 !important;
+	color: white !important;
 }
 
 .chat-box {
-	width: 38%;
-	min-width: 250px;
 	margin: 10px;
 	padding: 30px;
 	border: 1px solid #ddd;
@@ -26,15 +32,8 @@ h3 {
 	border-radius: 2px;
 	background-color: white;
 }
-.online-container {
-	width: 8%;
-	margin: auto;
-	text-align: center;
-	padding: 20px;
-}
 .online-box {
-	padding: 10px;
-	margin: auto;
+	/* margin: auto; */
 	border: 1px solid black;
 	background: rgb(249, 249, 249);
 	visibility: hidden;
@@ -95,7 +94,6 @@ input {
 
 button {
 	display: block;
-	background: #00b300;
 	color: #fff;
 	font-size: 18px;
 	margin: 2px;
@@ -103,21 +101,24 @@ button {
 	width: 100%;
 	border-radius: 0 0 2px 2px;
 	border: 1px solid #ddd;
-}
-
-.btn-group button {
-	background-color: #00b300; /* Green background */
-	border: 1px solid green; /* Green border */
-	color: white; /* White text */
 	cursor: pointer; /* Pointer/hand icon */
-	float: left; /* Float the buttons side by side */
-	visibility: hidden;
-	margin: 12% 0%;
 }
 
+.room-buttons button {
+	background-color: #00b300;
+	visibility: hidden;
+}
+.bluebutton {
+	background-color: #0093e8;
+}
 /* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_button_group_justified */
 
 /* Add a background color on hover */
 .btn-group button:hover {
 	background-color: #3e8e41;
+}
+.verticalcenter {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
