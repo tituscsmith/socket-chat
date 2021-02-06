@@ -48,14 +48,14 @@ const client = new MongoClient(url, {
 		console.log('Made socket connection', socket.id);
 		socket.join(id);
 		socket.on('online', function (id, uname) {
-			socket.username = uname;
+			// console.log(uname);
+			socket.username = customFilter.clean(uname);
 			users[socket.username] = socket.id;
-			console.log(socket.username + '=' + users[socket.username]);
 			socket.broadcast.emit('online', socket.username);
 
 			usersCollection.updateOne(
-				{ username: uname },
-				{ $set: { username: uname, status: 'online' } },
+				{ username: socket.username },
+				{ $set: { username: socket.username, status: 'online' } },
 				{ upsert: true },
 				function (err, res) {
 					console.log('inserted user into database');
@@ -77,7 +77,6 @@ const client = new MongoClient(url, {
 										(val) => val !== row.username
 									);
 								}
-								console.log(offlineArray);
 							}
 						})
 						.then(function () {
@@ -91,6 +90,10 @@ const client = new MongoClient(url, {
 
 		//Loads all messages from private message database
 		socket.on('private-load', function (otherName, yourName) {
+			otherName = customFilter.clean(otherName);
+			yourName = customFilter.clean(yourName);
+			console.log(otherName);
+			console.log(yourName);
 			//Find any messages between the people
 			messagesCollection
 				.find({
@@ -108,7 +111,7 @@ const client = new MongoClient(url, {
 							' Message: ' +
 							row.body
 					);
-					var socketId = users[otherName];
+					// var socketId = users[otherName];
 					// io.to(socketId).emit('private-message', row.sender, row.body, row.timestamp);
 					if (row.sender != row.receiver) {
 						socket.emit('private-message', row.sender, row.body, row.timestamp);
@@ -119,7 +122,8 @@ const client = new MongoClient(url, {
 		socket.on('room-load', function (room) {
 			//Find any messages between the people
 			roomCollection.find({ room: room }).forEach(function (row) {
-				console.log('Room: ' + room + ' Message: ' + row.body);
+				row.sender = customFilter.clean(row.sender);
+				// console.log('Room: ' + room + ' Message: ' + row.body);
 				// var socketId = users[otherName];
 				//io.in(room).emit('chat', {handle: row.sender, message: row.body, timestamp: row.timestamp});
 				socket.emit('chat', {
@@ -131,6 +135,9 @@ const client = new MongoClient(url, {
 		});
 
 		socket.on('private-message', function (otherName, yourName, message) {
+			otherName = customFilter.clean(otherName);
+			yourName = customFilter.clean(yourName);
+			// yourName = customFilter.clean(yourName);
 			var socketId = users[otherName];
 			message = customFilter.clean(message);
 			//Emit to other person and yourself
@@ -189,8 +196,6 @@ const client = new MongoClient(url, {
 						//Remove name from online list
 						onlineArray = onlineArray.filter((val) => val !== socket.username);
 						io.emit('users-online', offlineArray, onlineArray);
-						console.log('Offline Array:' + offlineArray);
-						console.log('Online Array:' + onlineArray);
 
 						usersCollection.find({}).forEach(function (row) {});
 					}
@@ -198,6 +203,7 @@ const client = new MongoClient(url, {
 			);
 		});
 		socket.on('chat', function (id, data) {
+			data.handle = customFilter.clean(data.handle);
 			roomCollection.insertOne(
 				{
 					body: customFilter.clean(data.message),
@@ -220,7 +226,6 @@ const client = new MongoClient(url, {
 
 		// Handle typing event
 		socket.on('typing', function (id) {
-			console.log('RT is typing');
 			socket.to(id).emit('typing', socket.username);
 		});
 	});

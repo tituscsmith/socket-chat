@@ -22,6 +22,7 @@ small {
 select {
 	background-color: #0093e8 !important;
 	color: white !important;
+	font-size: 18px !important;
 }
 
 .chat-box {

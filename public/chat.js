@@ -1,8 +1,8 @@
 //Client Side - Chat App - Titus Smith
 
 // Make connection
-var socket = io.connect('https://socket-chat-titus.herokuapp.com');
-// var socket = io.connect('http://localhost:4000');
+// var socket = io.connect('https://socket-chat-titus.herokuapp.com');
+var socket = io.connect('http://localhost:4000');
 
 //Need to enter swear word filtering
 
@@ -27,6 +27,7 @@ var message = document.getElementById('message'),
 const numRooms = 4;
 
 var id = 'some room';
+
 privateSelect.addEventListener('change', function () {
 	if (
 		privateSelect.value == 'default' &&
